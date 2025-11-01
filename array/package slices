@@ -1,0 +1,49 @@
+// Tìm hiểu về package slices
+// Cloning a slice
+copied := slices.Clone([]int{1, 2, 3, 4, 5})
+fmt.Println("Slice ban đầu:", copied)
+
+// So sánh 2 slice
+equal := slices.Equal([]int{1, 2, 3}, []int{1, 2, 3})
+fmt.Println("2 slice có bằng nhau không?", equal)
+
+// Tìm phần tử trong slice
+index := slices.Index([]int{10, 20, 30, 40, 50}, 30)
+fmt.Println("Vị trí phần tử 30 trong slice:", index)
+
+// Kiểm tra phần tử có trong slice không
+contains := slices.Contains([]int{10, 20, 30, 40, 50}, 20)
+fmt.Println("Slice có chứa phần tử 20 không?", contains)
+
+// Chèn thêm phần tử vào slice
+newSlice := slices.Insert([]int{1, 2, 4, 5}, 2, 3)
+fmt.Println("Slice sau khi chèn phần tử 3 vào vị trí 2:", newSlice)
+
+// Xoá phần tử khỏi slice
+removed := slices.Delete([]int{1, 2, 3, 4, 5}, 2, 3)
+fmt.Println("Slice sau khi xoá phần tử từ vị trí 2 đến 3:", removed)
+
+// Sắp xếp slice
+unsorted := []int{5, 2, 4, 1, 3}
+slices.Sort(unsorted)
+fmt.Println("Slice sau khi sắp xếp:", unsorted)
+
+// Đảo ngược slice
+reversed := []int{1, 2, 3, 4, 5}
+slices.Reverse(reversed)
+fmt.Println("Slice sau khi đảo ngược:", reversed)
+
+// Sắp xếp slice theo điều kiện tuỳ chỉnh
+s := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+slices.SortFunc(s, func(a, b int) int {
+	return b - a // Sắp xếp số chẵn trước số lẻ
+})
+fmt.Println("Slice sau khi sắp xếp theo điều kiện tuỳ chỉnh:", s)
+
+// Min và Max trong slice
+nums := []int{42, 17, 68, 5, 99, 23}
+min := slices.Min(nums)
+max := slices.Max(nums)
+fmt.Println("Slice:", nums)
+fmt.Println("Giá trị nhỏ nhất trong slice:", min)
+fmt.Println("Giá trị lớn nhất trong slice:", max)
