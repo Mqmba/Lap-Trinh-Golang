@@ -24,15 +24,19 @@ func getAverageScore(s Student) float64 {
 	return total / float64(len(s.Score))
 }
 
-func getID(student Student) int {
-	return student.ID
+func (s Student) GetID() int {
+	return s.ID
 }
 
-func checkDuplicateID(id int, list []Student) bool {
-	for _, student := range list {
-		if getID(student) == id {
-			return true
-		}
-	}
-	return false
-}
+// func getID(student Student) int {
+// 	return student.ID
+// }
+
+// func checkDuplicateID(id int, list []Student) bool {
+// 	for _, student := range list {
+// 		if getID(student) == id {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }

@@ -15,7 +15,7 @@ func addStudent() {
 	fmt.Println("-=-=-=-=-=- Thêm sinh viên mới -=-=-=-=-=-")
 	for {
 		id = utils.GetPositiveIntInput("Nhập mã số sinh viên: ")
-		if !checkDuplicateID(id, studentList) {
+		if !utils.CheckDuplicateID(id, studentList) {
 			break
 		}
 		fmt.Println("❌Mã số sinh viên đã tồn tại. Vui lòng nhập mã số khác.❌")

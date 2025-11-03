@@ -51,3 +51,16 @@ func ClearScreen() {
 		fmt.Println("Lỗi khi xóa màn hình:", err)
 	}
 }
+
+type HasId interface {
+	GetID() int
+}
+
+func CheckDuplicateID[T HasId](id int, list []T) bool {
+	for _, item := range list {
+		if item.GetID() == id {
+			return true
+		}
+	}
+	return false
+}

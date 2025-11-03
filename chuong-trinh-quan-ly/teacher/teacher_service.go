@@ -14,7 +14,7 @@ func addTeacher() {
 	fmt.Println("-=-=-=-=-=- Thêm giảng viên mới -=-=-=-=-=-")
 	for {
 		id = utils.GetPositiveIntInput("Nhập mã số giảng viên: ")
-		if !checkDuplicateID(id, teacherList) {
+		if !utils.CheckDuplicateID(id, teacherList) {
 			break
 		}
 		fmt.Println("❌Mã số giảng viên đã tồn tại. Vui lòng nhập mã số khác.❌")
