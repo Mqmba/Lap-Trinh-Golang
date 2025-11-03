@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"mamba.com/chuong-trinh-quan-ly/student"
+	"mamba.com/chuong-trinh-quan-ly/teacher"
 	"mamba.com/chuong-trinh-quan-ly/utils"
 )
 
@@ -21,7 +22,7 @@ func main() {
 		case 1:
 			student.StudentMenu()
 		case 2:
-			fmt.Println("Bạn đã chọn quản lý giảng viên.")
+			teacher.TeacherMenu()
 		case 3:
 			fmt.Println("❌Thoát chương trình.❌")
 			return

@@ -11,8 +11,15 @@ var studentList []Student
 func addStudent() {
 	// Implementation for adding a student
 	var score []float64
+	var id int
 	fmt.Println("-=-=-=-=-=- Thêm sinh viên mới -=-=-=-=-=-")
-	id := utils.GetPositiveIntInput("Nhập mã số sinh viên: ")
+	for {
+		id = utils.GetPositiveIntInput("Nhập mã số sinh viên: ")
+		if !checkDuplicateID(id, studentList) {
+			break
+		}
+		fmt.Println("❌Mã số sinh viên đã tồn tại. Vui lòng nhập mã số khác.❌")
+	}
 	name := utils.ReadInput("Nhập họ và tên sinh viên: ")
 	class := utils.ReadInput("Nhập lớp sinh viên: ")
 	totalPoint := utils.GetPositiveIntInput("Nhập điểm sinh viên: ")
@@ -54,18 +61,29 @@ func showStudentList() {
 		return
 	}
 	for _, student := range studentList {
-		fmt.Printf("%+v\n", student)
+		fmt.Println(getInfo(student))
 	}
+	utils.ReadInput("Nhấn Enter để tiếp tục...")
+}
+
+func searchStudentByID(id int) *Student {
+	for i, student := range studentList {
+		if student.ID == id {
+			return &studentList[i]
+		}
+	}
+	return nil
 }
 
 func StudentMenu() {
 	for {
-		utils.ClearScreen()
-		fmt.Println("Quản lý sinh viên")
+		// utils.ClearScreen()
+		fmt.Println("\n-=-=-=-=-=- Quản lý sinh viên -=-=-=-=-=-")
 		fmt.Println("1️⃣. Thêm sinh viên")
 		fmt.Println("2️⃣. Xóa sinh viên")
 		fmt.Println("3️⃣. Hiển thị danh sách sinh viên")
-		fmt.Println("4️⃣. ❌Thoát❌")
+		fmt.Println("4️⃣. Tìm kiếm sinh viên theo mã số")
+		fmt.Println("5️⃣. Quay lại menu chính")
 
 		choice := utils.GetPositiveIntInput("👉Vui lòng chọn một tùy chọn: ")
 
@@ -77,11 +95,18 @@ func StudentMenu() {
 		case 3:
 			showStudentList()
 		case 4:
-			fmt.Println("❌Thoát chương trình.❌")
+			id := utils.GetPositiveIntInput("Nhập mã số sinh viên cần tìm: ")
+			student := searchStudentByID(id)
+			if student != nil {
+				fmt.Println("Thông tin sinh viên:")
+				fmt.Println(getInfo(*student))
+			} else {
+				fmt.Println("Không tìm thấy sinh viên với mã số đã cho.")
+			}
+		case 5:
 			return
 		default:
 			fmt.Println("Lựa chọn không hợp lệ.")
 		}
-		utils.ReadInput("Nhấn Enter để tiếp tục...")
 	}
 }
