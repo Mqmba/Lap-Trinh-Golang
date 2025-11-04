@@ -16,6 +16,17 @@ func ReadInput(prompt string) string {
 	return strings.TrimSpace(input)
 }
 
+func GetIntInput(prompt string) int {
+	for {
+		input := ReadInput(prompt)
+		value, err := strconv.Atoi(input)
+		if err == nil && value >= 0 {
+			return value
+		}
+		fmt.Println("Vui lòng nhập một số lớn hơn 0.")
+	}
+}
+
 func GetPositiveIntInput(prompt string) int {
 	for {
 		input := ReadInput(prompt)
@@ -31,11 +42,42 @@ func GetPositiveFloatInput(prompt string) float64 {
 	for {
 		input := ReadInput(prompt)
 		value, err := strconv.ParseFloat(input, 64)
-		if err == nil && value > 0 {
+		if err == nil && value >= 0 {
 			return value
 		}
 		fmt.Println("Vui lòng nhập một số thực dương.")
 	}
+}
+
+func GetOptionalPositiveFloatInput(prompt string, oldValue float64) float64 {
+	input := ReadInput(prompt)
+	if input == "" {
+		return oldValue
+	}
+	value, err := strconv.ParseFloat(input, 64)
+	if err == nil && value >= 0 {
+		return value
+	}
+	fmt.Println("Giá trị không hợp lệ. Giữ nguyên giá trị cũ.")
+	return oldValue
+}
+
+func GetNonEmptyString(prompt string) string {
+	for {
+		input := ReadInput(prompt)
+		if input != "" {
+			return input
+		}
+		fmt.Println("Vui lòng nhập một chuỗi không rỗng.")
+	}
+}
+
+func GetOptionalString(prompt string, oldValue string) string {
+	input := ReadInput(prompt)
+	if input == "" {
+		return oldValue
+	}
+	return input
 }
 
 func ClearScreen() {
