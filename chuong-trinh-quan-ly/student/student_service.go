@@ -43,6 +43,7 @@ func addStudent() {
 	}
 	studentList = append(studentList, student)
 	fmt.Println("Đã thêm sinh viên thành công!")
+	utils.ReadInput("Nhấn Enter để tiếp tục")
 }
 
 var studentSample = Student{
@@ -58,19 +59,24 @@ func init() {
 
 func deleteStudent() {
 	// Implementation for deleting a student
+	if len(studentList) == 0 {
+		fmt.Println("Danh sách sinh viên đang trống.")
+		utils.ReadInput("Nhấn Enter để tiếp tục")
+		return
+	}
 	var id int
 	id = utils.GetPositiveIntInput("Nhập mã số sinh viên cần xóa: ")
-
 	for i, student := range studentList {
 		if student.ID == id {
 			studentList = append(studentList[:i], studentList[i+1:]...)
 			fmt.Println("Đã xóa sinh viên thành công!")
-			break
+			utils.ReadInput("Nhấn Enter để tiếp tục")
+			return
 		}
 	}
-	if len(studentList) == 0 || studentList[len(studentList)-1].ID != id {
-		fmt.Println("Không tìm thấy sinh viên với mã số đã cho.")
-	}
+	fmt.Println("Không tìm thấy giảng viên với mã số đã cho.")
+	utils.ReadInput("Nhấn Enter để tiếp tục")
+
 }
 
 func updateStudent() {
@@ -120,8 +126,10 @@ func updateStudent() {
 		student.Score = score
 		fmt.Println("Đã cập nhật thông tin sinh viên thành công!")
 		fmt.Printf("%+v\n", *student)
+		utils.ReadInput("Nhấn Enter để tiếp tục...")
 	} else {
 		fmt.Println("Không tìm thấy sinh viên với mã số đã cho.")
+		utils.ReadInput("Nhấn Enter để tiếp tục")
 	}
 }
 
@@ -129,6 +137,7 @@ func showStudentList() {
 	fmt.Println("-=-=-=-=-=- Danh sách sinh viên -=-=-=-=-=-")
 	if len(studentList) == 0 {
 		fmt.Println(" ==> Không có sinh viên nào trong danh sách.")
+		utils.ReadInput("Nhấn Enter để tiếp tục")
 		return
 	}
 	for _, student := range studentList {
@@ -148,17 +157,15 @@ func searchStudentByID(id int) *Student {
 
 func StudentMenu() {
 	for {
-		// utils.ClearScreen()
+		utils.ClearScreen()
 		fmt.Println("\n-=-=-=-=-=- Quản lý sinh viên -=-=-=-=-=-")
 		fmt.Println("1️⃣. Thêm sinh viên")
 		fmt.Println("2️⃣. Xóa sinh viên")
 		fmt.Println("3️⃣. Sửa sinh viên")
 		fmt.Println("4️⃣. Hiển thị danh sách sinh viên")
 		fmt.Println("5️⃣. Tìm kiếm sinh viên theo mã số")
-		fmt.Println("6️⃣. Quay lại menu chính")
-
+		fmt.Println("6️⃣. Quay lại menu chính 🔙")
 		choice := utils.GetPositiveIntInput("👉Vui lòng chọn một tùy chọn: ")
-
 		switch choice {
 		case 1:
 			addStudent()
@@ -174,8 +181,10 @@ func StudentMenu() {
 			if student != nil {
 				fmt.Println("Thông tin sinh viên:")
 				fmt.Println(getInfo(*student))
+				utils.ReadInput("Nhấn Enter để tiếp tục")
 			} else {
 				fmt.Println("Không tìm thấy sinh viên với mã số đã cho.")
+				utils.ReadInput("Nhấn Enter để tiếp tục")
 			}
 		case 6:
 			return

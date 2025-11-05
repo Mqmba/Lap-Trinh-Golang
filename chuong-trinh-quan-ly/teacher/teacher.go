@@ -5,18 +5,18 @@ import "fmt"
 type Teacher struct {
 	ID       int
 	Name     string
-	subjects string
-	salary   float64
-	bonus    float64
+	Subjects string
+	Salary   float64
+	Bonus    float64
 }
 
 func getInfo(teacher Teacher) string {
 	return fmt.Sprintf("Id: %d || Name: %s || Subjects: %s || Total Compensation: %.2f",
-		teacher.ID, teacher.Name, teacher.subjects, getTotalCompensation(teacher))
+		teacher.ID, teacher.Name, teacher.Subjects, getTotalCompensation(teacher))
 }
 
 func getTotalCompensation(teacher Teacher) float64 {
-	return teacher.salary + teacher.bonus
+	return teacher.Salary + teacher.Bonus
 }
 
 func (t Teacher) GetID() int {
