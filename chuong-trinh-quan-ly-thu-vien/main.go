@@ -8,6 +8,9 @@ import (
 )
 
 func main() {
+
+	lib := library.NewLibrary()
+
 	for {
 		utils.ClearScreen()
 		fmt.Println("CHƯƠNG TRÌNH QUẢN LÝ THƯ VIỆN")
@@ -28,7 +31,7 @@ func main() {
 		switch choice {
 		case 1:
 			fmt.Println("-=-=-=-=- Thêm sách -=-=-=-=-")
-			if err := library.AddBook(); err != nil {
+			if err := library.AddBook(lib); err != nil {
 				fmt.Printf("❌ Lỗi khi thêm sách: %+v \n", err)
 			}
 		case 2:
