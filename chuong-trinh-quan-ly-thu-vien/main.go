@@ -41,12 +41,12 @@ func main() {
 			}
 		case 3:
 			fmt.Println("-=-=-=-=- Thêm người mượn -=-=-=-=-")
-			if err := library.AddBorrower(); err != nil {
+			if err := library.AddBorrower(lib); err != nil {
 				fmt.Printf("❌ Lỗi khi thêm người mượn: %+v \n", err)
 			}
 		case 4:
 			fmt.Println("-=-=-=-=- Xem danh sách người mượn -=-=-=-=-")
-			if err := library.ListBorrowers(); err != nil {
+			if err := library.ListBorrowers(lib); err != nil {
 				fmt.Printf("❌ Lỗi khi xem danh sách người mượn: %+v \n", err)
 			}
 		case 5:

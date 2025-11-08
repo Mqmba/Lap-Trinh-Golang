@@ -39,11 +39,26 @@ func ListBooks(lib *Library) error {
 	return nil
 }
 
-func AddBorrower() error {
+func AddBorrower(lib *Library) error {
+	id := utils.GenerateID()
+	name := utils.GetNonEmptyString("Nhập tên người mượn: ")
+	email := utils.GetNonEmptyString("Nhập email người mượn: ")
+	if err := lib.addBorrower(id, name, email); err != nil {
+		return err
+	}
+	fmt.Printf("✅Thêm người mượn thành công! ID: %s\n", id)
 	return nil
 }
 
-func ListBorrowers() error {
+func ListBorrowers(lib *Library) error {
+	borrowers := lib.ListBorrowersStore()
+	if len(borrowers) == 0 {
+		fmt.Println("Không có người mượn trong thư viện!")
+		return nil
+	}
+	for _, borrower := range borrowers {
+		fmt.Printf("ID: %s, Tên: %s, Email: %s\n", borrower.Id, borrower.Name, borrower.Email)
+	}
 	return nil
 }
 
