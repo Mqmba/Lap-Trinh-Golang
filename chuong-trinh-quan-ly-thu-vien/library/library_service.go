@@ -62,7 +62,15 @@ func ListBorrowers(lib *Library) error {
 	return nil
 }
 
-func BorrowBook() error {
+func BorrowBook(lib *Library) error {
+	TransactionId := utils.GenerateID()
+	bookId := utils.GetNonEmptyString("Nhập ID sách: ")
+	borrowerId := utils.GetNonEmptyString("Nhập ID người mượn: ")
+
+	if err := lib.Borrow(TransactionId, bookId, borrowerId); err != nil {
+		return err
+	}
+	fmt.Printf("✅Mượn sách thành công! ID giao dịch: %s\n", TransactionId)
 	return nil
 }
 

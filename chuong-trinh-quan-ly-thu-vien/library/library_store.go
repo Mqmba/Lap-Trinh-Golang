@@ -2,19 +2,22 @@ package library
 
 import (
 	"fmt"
+	"time"
 
 	"mamba.com/chuong-trinh-quan-ly-thu-vien/models"
 )
 
 type Library struct {
-	book      map[string]models.Book
-	borrowers map[string]models.Borrower
+	book         map[string]models.Book
+	borrowers    map[string]models.Borrower
+	transactions map[string]models.Transaction
 }
 
 func NewLibrary() *Library {
 	return &Library{
-		book:      make(map[string]models.Book),
-		borrowers: make(map[string]models.Borrower),
+		book:         make(map[string]models.Book),
+		borrowers:    make(map[string]models.Borrower),
+		transactions: make(map[string]models.Transaction),
 	}
 }
 
@@ -61,4 +64,43 @@ func (lib *Library) ListBorrowersStore() []models.Borrower {
 		borrowers = append(borrowers, borrower)
 	}
 	return borrowers
+}
+
+// Borrow mượn sách
+func (lib *Library) Borrow(id string, bookId string, borrowerId string) error {
+	// Kiểm tra sách và người mượn có tồn tại không và giao dịch đã tồn tại chưa
+	if _, exists := lib.book[bookId]; !exists {
+		return fmt.Errorf("Sách không tồn tại với ID: %s", bookId)
+	}
+	if _, exists := lib.borrowers[borrowerId]; !exists {
+		return fmt.Errorf("Người mượn không tồn tại với ID: %s", borrowerId)
+	}
+	if _, exists := lib.transactions[id]; exists {
+		return fmt.Errorf("Giao dịch đã tồn tại với ID: %s", id)
+	}
+
+	// Lấy sách từ store
+	book, bookExists := lib.book[bookId]
+	if !bookExists {
+		return fmt.Errorf("Sách không tồn tại với ID: %s", bookId)
+	}
+
+	// Nếu sách đã được mượn thì trả lỗi
+	if book.IsBorrowed {
+		return fmt.Errorf("Sách %s đã được mượn", book.Title)
+	}
+
+	// Cập nhật trạng thái sách
+	book.IsBorrowed = true
+	lib.book[bookId] = book
+
+	// Tạo giao dịch mượn sách
+	lib.transactions[id] = models.Transaction{
+		TransactionId: id,
+		BookId:        bookId,
+		BorrowerId:    borrowerId,
+		BorrowDate:    time.Now(),
+		ReturnDate:    time.Time{}, // Trả sách chưa có ngày trả
+	}
+	return nil
 }

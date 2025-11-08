@@ -51,7 +51,7 @@ func main() {
 			}
 		case 5:
 			fmt.Println("-=-=-=-=- Mượn sách -=-=-=-=-")
-			if err := library.BorrowBook(); err != nil {
+			if err := library.BorrowBook(lib); err != nil {
 				fmt.Printf("❌ Lỗi khi mượn sách: %+v \n", err)
 			}
 		case 6:
