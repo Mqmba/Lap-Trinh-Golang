@@ -36,7 +36,7 @@ func main() {
 			}
 		case 2:
 			fmt.Println("-=-=-=-=- Xem danh sách sách -=-=-=-=-")
-			if err := library.ListBooks(); err != nil {
+			if err := library.ListBooks(lib); err != nil {
 				fmt.Printf("❌ Lỗi khi xem danh sách sách: %+v \n", err)
 			}
 		case 3:
