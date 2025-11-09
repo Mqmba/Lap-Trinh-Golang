@@ -11,6 +11,9 @@ func main() {
 
 	lib := library.NewLibrary()
 
+	// Khởi tạo dữ liệu mẫu
+	library.InitializeSampleData(lib)
+
 	for {
 		utils.ClearScreen()
 		fmt.Println("CHƯƠNG TRÌNH QUẢN LÝ THƯ VIỆN")
@@ -56,17 +59,17 @@ func main() {
 			}
 		case 6:
 			fmt.Println("-=-=-=-=- Xem lịch sử mượn -=-=-=-=-")
-			if err := library.ListBorrowHistory(); err != nil {
+			if err := library.ListBorrowHistory(lib); err != nil {
 				fmt.Printf("❌ Lỗi khi xem lịch sử mượn: %+v \n", err)
 			}
 		case 7:
 			fmt.Println("-=-=-=-=- Trả sách -=-=-=-=-")
-			if err := library.ReturnBook(); err != nil {
+			if err := library.ReturnBook(lib); err != nil {
 				fmt.Printf("❌ Lỗi khi trả sách: %+v \n", err)
 			}
 		case 8:
 			fmt.Println("-=-=-=-=- Tìm kiếm sách -=-=-=-=-")
-			if err := library.SearchBook(); err != nil {
+			if err := library.SearchBook(lib); err != nil {
 				fmt.Printf("❌ Lỗi khi tìm kiếm sách: %+v \n", err)
 			}
 		case 9:

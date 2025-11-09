@@ -2,20 +2,21 @@ package library
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"mamba.com/chuong-trinh-quan-ly-thu-vien/models"
 )
 
 type Library struct {
-	book         map[string]models.Book
+	books        map[string]models.Book
 	borrowers    map[string]models.Borrower
 	transactions map[string]models.Transaction
 }
 
 func NewLibrary() *Library {
 	return &Library{
-		book:         make(map[string]models.Book),
+		books:        make(map[string]models.Book),
 		borrowers:    make(map[string]models.Borrower),
 		transactions: make(map[string]models.Transaction),
 	}
@@ -24,10 +25,10 @@ func NewLibrary() *Library {
 // addBook thêm sách vào thư viện
 func (lib *Library) addBook(id string, title string, author string) error {
 	// Check trùng ID(chắc chắn ko xảy ra vì dùng uuid)
-	if _, exists := lib.book[id]; exists {
+	if _, exists := lib.books[id]; exists {
 		return fmt.Errorf("Sách đã tồn tại với ID: %s", id)
 	}
-	lib.book[id] = models.Book{
+	lib.books[id] = models.Book{
 		Id:     id,
 		Title:  title,
 		Author: author,
@@ -37,8 +38,8 @@ func (lib *Library) addBook(id string, title string, author string) error {
 
 // ListBooksStore lấy danh sách sách từ store
 func (lib *Library) ListBooksStore() []models.Book {
-	books := make([]models.Book, 0, len(lib.book))
-	for _, book := range lib.book {
+	books := make([]models.Book, 0, len(lib.books))
+	for _, book := range lib.books {
 		books = append(books, book)
 	}
 	return books
@@ -69,7 +70,7 @@ func (lib *Library) ListBorrowersStore() []models.Borrower {
 // Borrow mượn sách
 func (lib *Library) Borrow(id string, bookId string, borrowerId string) error {
 	// Kiểm tra sách và người mượn có tồn tại không và giao dịch đã tồn tại chưa
-	if _, exists := lib.book[bookId]; !exists {
+	if _, exists := lib.books[bookId]; !exists {
 		return fmt.Errorf("Sách không tồn tại với ID: %s", bookId)
 	}
 	if _, exists := lib.borrowers[borrowerId]; !exists {
@@ -80,7 +81,7 @@ func (lib *Library) Borrow(id string, bookId string, borrowerId string) error {
 	}
 
 	// Lấy sách từ store
-	book, bookExists := lib.book[bookId]
+	book, bookExists := lib.books[bookId]
 	if !bookExists {
 		return fmt.Errorf("Sách không tồn tại với ID: %s", bookId)
 	}
@@ -92,7 +93,7 @@ func (lib *Library) Borrow(id string, bookId string, borrowerId string) error {
 
 	// Cập nhật trạng thái sách
 	book.IsBorrowed = true
-	lib.book[bookId] = book
+	lib.books[bookId] = book
 
 	// Tạo giao dịch mượn sách
 	lib.transactions[id] = models.Transaction{
@@ -103,4 +104,42 @@ func (lib *Library) Borrow(id string, bookId string, borrowerId string) error {
 		ReturnDate:    time.Time{}, // Trả sách chưa có ngày trả
 	}
 	return nil
+}
+
+// ListBorrowHistoryStore lấy danh sách lịch sử mượn từ store
+func (lib *Library) ListBorrowHistoryByBorrower(borrowerId string) []models.Transaction {
+	// Kiểm tra người mượn có tồn tại không
+	if _, exists := lib.borrowers[borrowerId]; !exists {
+		return nil
+	}
+
+	// Lọc các giao dịch theo borrowerId
+	transactions := make([]models.Transaction, 0)
+	for _, transaction := range lib.transactions {
+		if transaction.BorrowerId == borrowerId {
+			transactions = append(transactions, transaction)
+		}
+	}
+	return transactions
+}
+
+func (lib *Library) getBookTitle(bookId string) string {
+	book := lib.books[bookId]
+	return book.Title
+}
+
+func (lib *Library) SearchBookStore(query string) []models.Book {
+	query = strings.ToLower(query)
+	var results []models.Book
+	for _, book := range lib.books {
+		if strings.Contains(strings.ToLower(book.Title), query) || strings.Contains(strings.ToLower(book.Author), query) {
+			results = append(results, book)
+		}
+	}
+	return results
+}
+
+// Hàm tiện ích so sánh không phân biệt hoa thường
+func containsIgnoreCase(str, substr string) bool {
+	return strings.Contains(strings.ToLower(str), strings.ToLower(substr))
 }
