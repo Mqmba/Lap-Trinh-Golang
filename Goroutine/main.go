@@ -1,32 +1,37 @@
 package main
 
 import (
-	"context"
 	"fmt"
+	"runtime"
+	"sync"
 	"time"
 )
 
-func employee(ctx context.Context) {
-	for {
-		select {
-		case <-ctx.Done():
-			fmt.Println("Công việc đã bị hủy: ", ctx.Err())
-			return
-		default:
-			priority := ctx.Value("priority")
-			fmt.Println("Đang làm việc của task ưu tiên với mức độ: ", priority)
-			time.Sleep(100 * time.Millisecond)
-		}
+func heavyTask(wg *sync.WaitGroup) {
+	defer wg.Done()
+	sum := 0
+	for i := 0; i < 100e8; i++ {
+		sum += i
 	}
 }
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-	defer cancel()
+	numCPU := runtime.NumCPU() // Kiểm tra số lượng CPU
+	fmt.Println("So CPU: ", numCPU)
 
-	ctx = context.WithValue(ctx, "priority", "high")
+	runtime.GOMAXPROCS(numCPU) // Ép tất cả CPU cùng chạy
 
-	go employee(ctx)
+	start := time.Now()
 
-	time.Sleep(3 * time.Second)
+	var wg sync.WaitGroup
+
+	for i := 0; i <= 10; i++ {
+		wg.Add(1)
+		go heavyTask(&wg)
+
+	}
+
+	wg.Wait()
+
+	fmt.Println("Tong thoi gian: ", time.Since(start))
 }
