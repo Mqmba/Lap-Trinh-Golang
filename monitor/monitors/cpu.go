@@ -11,14 +11,18 @@ import (
 type CPUMonitor struct {
 }
 
+func (cpu *CPUMonitor) Name() string {
+	return "CPU"
+}
+
 func (m *CPUMonitor) Check(ctx context.Context) string {
-	percent, err := cpu.PercentWithContext(ctx, 1*time.Second, false)
-	if err != nil && len(percent) == 0 {
-		return "N/A"
+	cpuStat, err := cpu.PercentWithContext(ctx, 1*time.Second, false)
+	if err != nil && len(cpuStat) == 0 {
+		return fmt.Sprintf("[CPU Monitor] could not retrieve CPU info: %v \n", err)
 	}
 
-	// fmt.Printf("%+v", percent)
-	value := fmt.Sprintf("%.2f%%", percent[0])
+	// fmt.Printf("%+v", cpuStat)
+	value := fmt.Sprintf("%.2f%%", cpuStat[0])
 
 	return value
 }
